@@ -1,0 +1,47 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+out/
+publish/
+artifacts/
+TestResults/
+AppPackages/
+BundleArtifacts/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# Rider / Visual Studio / VS Code
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.rsuser
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+.nuget/
+
+# ASP.NET / tooling caches
+wwwroot/dist/
+wwwroot/build/
+node_modules/
+
+# Logs
+*.log
+
+# Local environment and secrets
+.env
+.env.*
+!.env.docker.example
+secrets/
+appsettings.Local.json
+appsettings.*.local.json
+
+# OS files
+Thumbs.db
+Desktop.ini

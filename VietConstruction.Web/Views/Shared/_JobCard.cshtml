@@ -1,0 +1,14 @@
+@model JobCardViewModel
+
+<article class="job-card">
+    <div class="job-card__header">
+        <h3>@Model.Title</h3>
+        <span class="card-tag">Hạn nộp @Model.Deadline.ToString("dd/MM/yyyy")</span>
+    </div>
+    <ul class="meta-list">
+        <li><strong>Địa điểm:</strong> @Model.Location</li>
+        <li><strong>Kinh nghiệm:</strong> @Model.Experience</li>
+        <li><strong>Thu nhập:</strong> @Model.Salary</li>
+    </ul>
+    <p>@Model.Summary</p>
+</article>

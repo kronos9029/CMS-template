@@ -1,0 +1,15 @@
+@model ProjectCardViewModel
+
+<article class="project-card">
+    <img src="@Model.ImageUrl" alt="@Model.Title" loading="lazy" />
+    <div class="project-card__body">
+        <span class="card-tag">@Model.Status</span>
+        <h3>@Model.Title</h3>
+        <ul class="meta-list">
+            <li><strong>Địa điểm:</strong> @Model.Location</li>
+            <li><strong>Chủ đầu tư:</strong> @Model.Client</li>
+            <li><strong>Quy mô:</strong> @Model.Scale</li>
+        </ul>
+        <p>@Model.Summary</p>
+    </div>
+</article>

@@ -1,0 +1,32 @@
+@model NewsListingPageViewModel
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["MetaDescription"] = Model.MetaDescription;
+
+    var hero = new PageHeroViewModel
+    {
+        Eyebrow = Model.Eyebrow,
+        Title = Model.HeroTitle,
+        Summary = Model.HeroSummary,
+        Actions = Model.HeroActions
+    };
+}
+
+@await Html.PartialAsync("_PageHero", hero)
+
+<section class="page-shell">
+    <div class="container">
+        <div class="filter-tabs">
+            <a class="@(Model.CurrentCategory == "all" ? "is-active" : string.Empty)" href="/tin-tuc">Tất cả</a>
+            <a class="@(Model.CurrentCategory == "featured" ? "is-active" : string.Empty)" href="/tin-tuc/tin-noi-bat">Tin nổi bật</a>
+            <a class="@(Model.CurrentCategory == "announcements" ? "is-active" : string.Empty)" href="/tin-tuc/thong-bao">Thông báo</a>
+            <a href="/tin-tuc/tuyen-dung">Tuyển dụng</a>
+        </div>
+        <div class="card-grid card-grid--three">
+            @foreach (var article in Model.Articles)
+            {
+                @await Html.PartialAsync("_ArticleCard", article)
+            }
+        </div>
+    </div>
+</section>

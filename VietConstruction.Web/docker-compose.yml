@@ -1,0 +1,65 @@
+services:
+  vietconstruction-db:
+    image: mysql:8.4
+    container_name: vietconstruction-db
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$${MYSQL_ROOT_PASSWORD} --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 25s
+    networks:
+      - vietconstruction-network
+
+  vietconstruction-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vietconstruction-web
+    restart: unless-stopped
+    depends_on:
+      vietconstruction-db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: 8080
+      ConnectionStrings__MySql: Server=vietconstruction-db;Port=3306;Database=${MYSQL_DATABASE};User Id=${MYSQL_USER};Password=${MYSQL_PASSWORD};Character Set=utf8mb4;
+      DataProtection__KeysPath: /var/lib/vietconstruction/keys
+      DatabaseInitialization__MaxAttempts: 20
+      DatabaseInitialization__DelaySeconds: 5
+      CmsSeed__Enabled: true
+      CmsSeed__AdminEmail: ${CMS_ADMIN_EMAIL}
+      CmsSeed__AdminPassword: ${CMS_ADMIN_PASSWORD}
+      CmsSeed__AdminFullName: ${CMS_ADMIN_FULLNAME}
+      CmsSeed__EditorEmail: ${CMS_EDITOR_EMAIL}
+      CmsSeed__EditorPassword: ${CMS_EDITOR_PASSWORD}
+      CmsSeed__EditorFullName: ${CMS_EDITOR_FULLNAME}
+    ports:
+      - "${WEB_PORT}:8080"
+    volumes:
+      - dataprotection_keys:/var/lib/vietconstruction/keys
+    networks:
+      - vietconstruction-network
+
+networks:
+  vietconstruction-network:
+    name: vietconstruction-network
+
+volumes:
+  mysql_data:
+    name: vietconstruction_mysql_data
+  dataprotection_keys:
+    name: vietconstruction_dataprotection_keys

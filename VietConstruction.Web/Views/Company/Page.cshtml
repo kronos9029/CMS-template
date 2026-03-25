@@ -1,0 +1,55 @@
+@model CorporatePageViewModel
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["MetaDescription"] = Model.MetaDescription;
+
+    var hero = new PageHeroViewModel
+    {
+        Eyebrow = Model.Eyebrow,
+        Title = Model.HeroTitle,
+        Summary = Model.HeroSummary,
+        Metrics = Model.HeroMetrics,
+        Actions = Model.HeroActions
+    };
+}
+
+@await Html.PartialAsync("_PageHero", hero)
+
+<section class="page-shell">
+    <div class="container">
+        <div class="row g-5">
+            <aside class="col-lg-3">
+                <div class="anchor-card">
+                    <span class="section-label">Nội dung trang</span>
+                    <ul>
+                        @foreach (var pageSection in Model.Sections)
+                        {
+                            <li><a href="@($"#{pageSection.AnchorId}")">@pageSection.Title</a></li>
+                        }
+                    </ul>
+                </div>
+            </aside>
+            <div class="col-lg-9">
+                <div class="stack-list">
+                    @foreach (var pageSection in Model.Sections)
+                    {
+                        @await Html.PartialAsync("_ContentSection", pageSection)
+                    }
+                </div>
+            </div>
+        </div>
+        @if (Model.Highlights.Any())
+        {
+            <div class="section-heading">
+                <span class="section-label">Điểm nhấn</span>
+                <h2 class="section-title">Nội dung hỗ trợ trình bày doanh nghiệp</h2>
+            </div>
+            <div class="card-grid @(Model.Highlights.Any(card => !string.IsNullOrWhiteSpace(card.ImageUrl)) ? "card-grid--three" : "card-grid--three")">
+                @foreach (var item in Model.Highlights)
+                {
+                    @await Html.PartialAsync("_ShowcaseCard", item)
+                }
+            </div>
+        }
+    </div>
+</section>

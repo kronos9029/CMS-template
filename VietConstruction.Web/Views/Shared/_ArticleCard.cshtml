@@ -1,0 +1,11 @@
+@model ArticleCardViewModel
+
+<article class="article-card">
+    <img src="@Model.ImageUrl" alt="@Model.Title" loading="lazy" />
+    <div class="article-card__body">
+        <span class="card-tag">@Model.Category</span>
+        <span class="card-meta">@Model.PublishedOn.ToString("dd/MM/yyyy")</span>
+        <h3>@Model.Title</h3>
+        <p>@Model.Summary</p>
+    </div>
+</article>

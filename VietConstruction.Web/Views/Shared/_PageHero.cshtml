@@ -1,0 +1,32 @@
+@model PageHeroViewModel
+
+<section class="page-hero">
+    <div class="container">
+        <div class="page-hero__content">
+            <span class="section-label">@Model.Eyebrow</span>
+            <h1>@Model.Title</h1>
+            <p>@Model.Summary</p>
+            @if (Model.Actions.Any())
+            {
+                <div class="button-row">
+                    @foreach (var action in Model.Actions)
+                    {
+                        <a class="button @(action.IsPrimary ? "button--primary" : "button--secondary")" href="@action.Url">@action.Label</a>
+                    }
+                </div>
+            }
+        </div>
+        @if (Model.Metrics.Any())
+        {
+            <div class="hero-metrics">
+                @foreach (var metric in Model.Metrics)
+                {
+                    <div class="metric-card">
+                        <strong>@metric.Value</strong>
+                        <span>@metric.Label</span>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>

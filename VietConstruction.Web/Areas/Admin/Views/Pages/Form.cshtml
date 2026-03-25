@@ -1,0 +1,64 @@
+@model PageEditorInput
+
+<form method="post" class="admin-panel">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="Title" class="form-label"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Slug" class="form-label"></label>
+            <input asp-for="Slug" class="form-control" />
+            <span asp-validation-for="Slug" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="NavigationTitle" class="form-label"></label>
+            <input asp-for="NavigationTitle" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="TemplateKey" class="form-label"></label>
+            <input asp-for="TemplateKey" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="NavigationOrder" class="form-label"></label>
+            <input asp-for="NavigationOrder" class="form-control" />
+        </div>
+        <div class="col-12">
+            <label asp-for="MetaDescription" class="form-label"></label>
+            <textarea asp-for="MetaDescription" class="form-control" rows="2"></textarea>
+        </div>
+        <div class="col-12">
+            <label asp-for="Summary" class="form-label"></label>
+            <textarea asp-for="Summary" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="HeroTitle" class="form-label"></label>
+            <input asp-for="HeroTitle" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="HeroSummary" class="form-label"></label>
+            <textarea asp-for="HeroSummary" class="form-control" rows="2"></textarea>
+        </div>
+        <div class="col-12">
+            <label asp-for="BodyHtml" class="form-label"></label>
+            <textarea asp-for="BodyHtml" class="form-control admin-editor" rows="12"></textarea>
+        </div>
+        <div class="col-md-3 form-check">
+            <input asp-for="ShowInNavigation" class="form-check-input" />
+            <label asp-for="ShowInNavigation" class="form-check-label"></label>
+        </div>
+        <div class="col-md-3 form-check">
+            <input asp-for="IsPublished" class="form-check-input" />
+            <label asp-for="IsPublished" class="form-check-label"></label>
+        </div>
+    </div>
+    <div class="admin-form-actions">
+        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+        <a class="btn btn-outline-secondary" asp-action="Index">Quay lại</a>
+    </div>
+</form>
+
+<partial name="_ValidationScriptsPartial" />

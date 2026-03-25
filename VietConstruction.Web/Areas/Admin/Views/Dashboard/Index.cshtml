@@ -1,0 +1,67 @@
+@model DashboardViewModel
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="admin-stat">
+            <span>Trang</span>
+            <strong>@Model.PageCount</strong>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="admin-stat">
+            <span>Dự án</span>
+            <strong>@Model.ProjectCount</strong>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="admin-stat">
+            <span>Bài viết</span>
+            <strong>@Model.PostCount</strong>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="admin-stat">
+            <span>Liên hệ</span>
+            <strong>@Model.ContactCount</strong>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-4">
+        <section class="admin-panel">
+            <h2 class="h6">Dự án cập nhật gần đây</h2>
+            @foreach (var item in Model.RecentProjects)
+            {
+                <div class="admin-list-item">
+                    <strong>@item.Title</strong>
+                    <span>@item.Meta</span>
+                </div>
+            }
+        </section>
+    </div>
+    <div class="col-lg-4">
+        <section class="admin-panel">
+            <h2 class="h6">Bài viết mới</h2>
+            @foreach (var item in Model.RecentPosts)
+            {
+                <div class="admin-list-item">
+                    <strong>@item.Title</strong>
+                    <span>@item.Meta</span>
+                </div>
+            }
+        </section>
+    </div>
+    <div class="col-lg-4">
+        <section class="admin-panel">
+            <h2 class="h6">Liên hệ mới nhận</h2>
+            @foreach (var item in Model.RecentContacts)
+            {
+                <div class="admin-list-item">
+                    <strong>@item.Title</strong>
+                    <span>@item.Meta</span>
+                </div>
+            }
+        </section>
+    </div>
+</div>

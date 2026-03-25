@@ -1,0 +1,42 @@
+@model IEnumerable<ProjectEntry>
+
+<div class="admin-actions">
+    <a class="btn btn-primary" asp-action="Create">Thêm dự án</a>
+</div>
+
+<div class="admin-panel">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Dự án</th>
+                    <th>Địa điểm</th>
+                    <th>Trạng thái</th>
+                    <th>Nổi bật</th>
+                    <th class="text-end">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <strong>@item.Title</strong>
+                            <div class="small text-secondary">@item.ClientName</div>
+                        </td>
+                        <td>@item.Location</td>
+                        <td>@item.Status</td>
+                        <td>@(item.IsFeatured ? "Có" : "Không")</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@item.Id">Sửa</a>
+                            <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Xóa dự án này?');">Xóa</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

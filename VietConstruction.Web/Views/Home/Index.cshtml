@@ -1,0 +1,176 @@
+@model HomePageViewModel
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["MetaDescription"] = Model.MetaDescription;
+}
+
+<section class="home-hero">
+    <div class="home-hero__shell">
+        <div class="container">
+            <div class="home-hero__grid">
+                <div class="home-hero__content">
+                    <span class="section-label">Minh Thành Việt</span>
+                    <div class="home-hero__lead">
+                        <p class="home-hero__eyebrow">Tổng thầu xây dựng dân dụng, công nghiệp và hạ tầng</p>
+                        <h1>@Model.HeroTitle</h1>
+                    </div>
+                    <p>@Model.HeroSummary</p>
+                    <div class="button-row">
+                        @foreach (var action in Model.HeroActions)
+                        {
+                            <a class="button @(action.IsPrimary ? "button--primary" : "button--secondary")" href="@action.Url">@action.Label</a>
+                        }
+                    </div>
+                    <div class="home-hero__statement">
+                        <span>Hồ sơ doanh nghiệp</span>
+                        <p>Thiết kế để thuyết phục chủ đầu tư bằng năng lực triển khai thực tế, không phải hiệu ứng trình diễn.</p>
+                    </div>
+                </div>
+                <div class="home-hero__visual">
+                    <article class="hero-project hero-project--primary">
+                        <img src="@Model.FeaturedProjects[0].ImageUrl" alt="@Model.FeaturedProjects[0].Title" />
+                        <div class="hero-project__caption">
+                            <span>@Model.FeaturedProjects[0].Status</span>
+                            <strong>@Model.FeaturedProjects[0].Title</strong>
+                            <small>@Model.FeaturedProjects[0].Location</small>
+                        </div>
+                    </article>
+                    <div class="hero-project-stack">
+                        <article class="hero-project">
+                            <img src="@Model.FeaturedProjects[1].ImageUrl" alt="@Model.FeaturedProjects[1].Title" />
+                            <div class="hero-project__caption">
+                                <span>@Model.FeaturedProjects[1].Status</span>
+                                <strong>@Model.FeaturedProjects[1].Title</strong>
+                            </div>
+                        </article>
+                        <article class="hero-project hero-project--outline">
+                            <div class="hero-project__number">126</div>
+                            <div class="hero-project__caption">
+                                <span>Năng lực đã kiểm chứng</span>
+                                <strong>Dự án trên nhiều tỉnh thành và loại hình công trình</strong>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="proof-strip">
+            @foreach (var metric in Model.HeroMetrics)
+            {
+                <div class="proof-strip__item">
+                    <strong>@metric.Value</strong>
+                    <span>@metric.Label</span>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="section-block">
+    <div class="container">
+        <div class="editorial-split">
+            <div>
+                <span class="section-label">Giới thiệu doanh nghiệp</span>
+                <h2 class="section-title">@Model.IntroTitle</h2>
+                <p class="section-summary">@Model.IntroSummary</p>
+                <a class="text-link" href="/gioi-thieu">Đọc hồ sơ giới thiệu</a>
+            </div>
+            <div>
+                <div class="intro-list">
+                    @foreach (var item in Model.IntroHighlights)
+                    {
+                        <div class="intro-list__item">
+                            <strong>@item</strong>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-block section-block--muted">
+    <div class="container">
+        <div class="section-heading">
+            <span class="section-label">Năng lực nổi bật</span>
+            <h2 class="section-title">Cấu trúc thông tin ưu tiên khả năng thuyết phục</h2>
+            <p class="section-summary">Mỗi khối nội dung phục vụ một nhu cầu rõ ràng: xác minh pháp lý, đánh giá năng lực, xem dự án, cập nhật thông tin và tuyển dụng.</p>
+        </div>
+        <div class="card-grid card-grid--four">
+            @foreach (var item in Model.CapabilityHighlights)
+            {
+                @await Html.PartialAsync("_ShowcaseCard", item)
+            }
+        </div>
+    </div>
+</section>
+
+<section class="section-block">
+    <div class="container">
+        <div class="section-heading section-heading--between">
+            <div>
+                <span class="section-label">Dự án tiêu biểu</span>
+                <h2 class="section-title">Hình ảnh dự án được đưa lên vị trí trung tâm</h2>
+            </div>
+            <a class="text-link" href="/du-an">Xem toàn bộ dự án</a>
+        </div>
+        <div class="card-grid card-grid--projects">
+            @foreach (var project in Model.FeaturedProjects)
+            {
+                @await Html.PartialAsync("_ProjectCard", project)
+            }
+        </div>
+    </div>
+</section>
+
+<section class="section-block section-block--muted">
+    <div class="container">
+        <div class="news-layout">
+            <div>
+                <div class="section-heading section-heading--between">
+                    <div>
+                        <span class="section-label">Tin tức mới nhất</span>
+                        <h2 class="section-title">Cập nhật công trình và doanh nghiệp</h2>
+                    </div>
+                    <a class="text-link" href="/tin-tuc">Xem chuyên mục</a>
+                </div>
+                <div class="card-grid">
+                    @foreach (var article in Model.LatestNews)
+                    {
+                        @await Html.PartialAsync("_ArticleCard", article)
+                    }
+                </div>
+            </div>
+            <div>
+                <div class="section-heading section-heading--between">
+                    <div>
+                        <span class="section-label">Tuyển dụng</span>
+                        <h2 class="section-title">Nhu cầu nhân sự hiện tại</h2>
+                    </div>
+                    <a class="text-link" href="/tin-tuc/tuyen-dung">Xem chi tiết</a>
+                </div>
+                <div class="stack-list">
+                    @foreach (var job in Model.RecruitmentPreview)
+                    {
+                        @await Html.PartialAsync("_JobCard", job)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-band">
+    <div class="container cta-band__inner">
+        <div>
+            <span class="section-label">Liên hệ nhanh</span>
+            <h2>Sẵn sàng giới thiệu hồ sơ năng lực và trao đổi cơ hội hợp tác</h2>
+        </div>
+        <div class="button-row">
+            <a class="button button--primary" href="/lien-he">Gửi yêu cầu tư vấn</a>
+            <a class="button button--secondary" href="/ho-so-phap-ly">Xem hồ sơ pháp lý</a>
+        </div>
+    </div>
+</section>

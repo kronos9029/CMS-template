@@ -1,0 +1,37 @@
+@model IEnumerable<ContactSubmission>
+
+<div class="admin-panel">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Người gửi</th>
+                    <th>Liên hệ</th>
+                    <th>Nội dung</th>
+                    <th>Trạng thái</th>
+                    <th class="text-end">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <strong>@item.FullName</strong>
+                            <div class="small text-secondary">@item.CreatedAtUtc.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</div>
+                        </td>
+                        <td>
+                            <div>@item.PhoneNumber</div>
+                            <div class="small text-secondary">@item.Email</div>
+                        </td>
+                        <td>@item.Message</td>
+                        <td>@(item.IsResolved ? "Đã xử lý" : "Chưa xử lý")</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@item.Id">Cập nhật</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

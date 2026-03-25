@@ -1,0 +1,9 @@
+bin/
+obj/
+.git/
+.vs/
+node_modules/
+*.log
+docker-compose*.yml
+.env.docker
+.env

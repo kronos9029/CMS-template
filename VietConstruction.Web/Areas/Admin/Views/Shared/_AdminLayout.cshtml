@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@(ViewData["Title"] ?? "CMS") - Việt Thành Công CMS</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body class="admin-body">
+    <div class="admin-shell">
+        <aside class="admin-sidebar">
+            <a class="admin-brand" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                <span class="admin-brand__eyebrow">CMS .NET</span>
+                <strong>Việt Thành Công</strong>
+            </a>
+            <nav class="admin-nav">
+                <a class="@(ViewData["ActiveSection"] as string == "dashboard" ? "active" : "")" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Tổng quan</a>
+                <a class="@(ViewData["ActiveSection"] as string == "pages" ? "active" : "")" asp-area="Admin" asp-controller="Pages" asp-action="Index">Trang</a>
+                <a class="@(ViewData["ActiveSection"] as string == "projects" ? "active" : "")" asp-area="Admin" asp-controller="Projects" asp-action="Index">Dự án</a>
+                <a class="@(ViewData["ActiveSection"] as string == "posts" ? "active" : "")" asp-area="Admin" asp-controller="Posts" asp-action="Index">Bài viết</a>
+                <a class="@(ViewData["ActiveSection"] as string == "categories" ? "active" : "")" asp-area="Admin" asp-controller="Categories" asp-action="Index">Danh mục</a>
+                <a class="@(ViewData["ActiveSection"] as string == "contacts" ? "active" : "")" asp-area="Admin" asp-controller="Contacts" asp-action="Index">Liên hệ</a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a class="@(ViewData["ActiveSection"] as string == "users" ? "active" : "")" asp-area="Admin" asp-controller="Users" asp-action="Index">Tài khoản</a>
+                }
+            </nav>
+        </aside>
+        <main class="admin-main">
+            <header class="admin-header">
+                <div>
+                    <div class="text-uppercase text-secondary small">Hệ quản trị nội dung</div>
+                    <h1 class="h4 m-0">@ViewData["Title"]</h1>
+                </div>
+                <div class="admin-user">
+                    <div class="small text-secondary">@User.Identity?.Name</div>
+                    <form asp-controller="Account" asp-action="Logout" asp-area="" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-outline-secondary btn-sm">Đăng xuất</button>
+                    </form>
+                </div>
+            </header>
+            @if (TempData["StatusMessage"] is string statusMessage)
+            {
+                <div class="alert alert-success">@statusMessage</div>
+            }
+            @if (TempData["ErrorMessage"] is string errorMessage)
+            {
+                <div class="alert alert-danger">@errorMessage</div>
+            }
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

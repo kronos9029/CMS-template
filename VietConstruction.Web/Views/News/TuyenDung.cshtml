@@ -1,0 +1,26 @@
+@model RecruitmentListingPageViewModel
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["MetaDescription"] = Model.MetaDescription;
+
+    var hero = new PageHeroViewModel
+    {
+        Eyebrow = Model.Eyebrow,
+        Title = Model.HeroTitle,
+        Summary = Model.HeroSummary,
+        Actions = Model.HeroActions
+    };
+}
+
+@await Html.PartialAsync("_PageHero", hero)
+
+<section class="page-shell">
+    <div class="container">
+        <div class="stack-list">
+            @foreach (var job in Model.Jobs)
+            {
+                @await Html.PartialAsync("_JobCard", job)
+            }
+        </div>
+    </div>
+</section>

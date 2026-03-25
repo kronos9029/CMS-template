@@ -1,0 +1,41 @@
+@model LoginInputModel
+@{
+    ViewData["Title"] = "Đăng nhập CMS";
+    Layout = "_AuthLayout";
+}
+
+<section class="container py-5 min-vh-100 d-flex align-items-center">
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 p-lg-5">
+                    <div class="text-uppercase text-secondary small mb-2">CMS .NET</div>
+                    <h1 class="h3 mb-3">Đăng nhập quản trị</h1>
+                    <p class="text-secondary">Dành cho Admin và Editor quản lý trang, dự án, tin tức, tuyển dụng và liên hệ.</p>
+                    <form method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label"></label>
+                            <input asp-for="Password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-check mb-4">
+                            <input asp-for="RememberMe" class="form-check-input" />
+                            <label asp-for="RememberMe" class="form-check-label"></label>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<partial name="_ValidationScriptsPartial" />

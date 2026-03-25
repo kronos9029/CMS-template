@@ -1,0 +1,128 @@
+@inject VietConstruction.Web.Services.ISiteContentService SiteContentService
+@{
+    var layout = SiteContentService.GetLayoutData();
+    var currentPath = Context.Request.Path.Value?.TrimEnd('/').ToLowerInvariant() ?? string.Empty;
+
+    bool IsCurrent(string url)
+    {
+        var normalized = url == "/" ? string.Empty : url.TrimEnd('/').ToLowerInvariant();
+        return currentPath == normalized || (!string.IsNullOrEmpty(normalized) && currentPath.StartsWith(normalized));
+    }
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] | @layout.Contact.CompanyName</title>
+    <meta name="description" content="@(ViewData["MetaDescription"] ?? "Website doanh nghiệp xây dựng chuyên nghiệp, giới thiệu năng lực, dự án, tin tức và liên hệ.")" />
+    <meta name="theme-color" content="#0d3c73" />
+    <script type="importmap"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="site-header" data-site-header>
+        <div class="site-topbar">
+            <div class="container site-topbar__inner">
+                <span>@layout.Contact.Tagline</span>
+                <div class="site-topbar__items">
+                    <span>Hotline: @layout.Contact.Hotline</span>
+                    <span>Email: @layout.Contact.Email</span>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="site-nav">
+                <a class="site-brand" href="/">
+                    <span class="site-brand__mark">MTV</span>
+                    <span class="site-brand__text">
+                        <strong>@layout.Contact.CompanyName</strong>
+                        <small>@layout.Contact.Tagline</small>
+                    </span>
+                </a>
+                <button class="site-nav__toggle" type="button" aria-label="Mở menu" data-nav-toggle>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <nav class="site-nav__menu" data-nav-menu>
+                    <ul class="site-nav__list">
+                        @foreach (var item in layout.Navigation)
+                        {
+                            var hasChildren = item.Children?.Any() == true;
+                            var isActive = IsCurrent(item.Url) || (item.Children?.Any(child => IsCurrent(child.Url)) ?? false);
+                            <li class="site-nav__item @(hasChildren ? "has-children" : string.Empty) @(isActive ? "is-active" : string.Empty)">
+                                <a href="@item.Url">@item.Label</a>
+                                @if (hasChildren)
+                                {
+                                    <ul class="site-nav__dropdown">
+                                        @foreach (var child in item.Children!)
+                                        {
+                                            <li><a href="@child.Url">@child.Label</a></li>
+                                        }
+                                    </ul>
+                                }
+                            </li>
+                        }
+                    </ul>
+                    <a class="button button--nav" href="/lien-he">Nhận tư vấn</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="site-footer__top">
+                <div class="site-footer__contact">
+                    <span class="section-label">Thông tin doanh nghiệp</span>
+                    <h2>@layout.Contact.CompanyName</h2>
+                    <p>@layout.Contact.Tagline</p>
+                    <ul>
+                        <li>@layout.Contact.Address</li>
+                        <li>Hotline: @layout.Contact.Hotline</li>
+                        <li>Email: @layout.Contact.Email</li>
+                        <li>Giờ làm việc: @layout.Contact.WorkingHours</li>
+                    </ul>
+                </div>
+                <div class="site-footer__links">
+                    @foreach (var group in layout.FooterGroups)
+                    {
+                        <div>
+                            <h3>@group.Title</h3>
+                            <ul>
+                                @foreach (var link in group.Links)
+                                {
+                                    <li><a href="@link.Url">@link.Label</a></li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="site-footer__bottom">
+                <div class="site-footer__credentials">
+                    @foreach (var credential in layout.FooterCredentials)
+                    {
+                        <span>@credential</span>
+                    }
+                </div>
+                <p>© 2026 @layout.Contact.CompanyName. Nội dung mẫu phục vụ trình bày cấu trúc website doanh nghiệp xây dựng.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

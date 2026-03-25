@@ -1,0 +1,44 @@
+@model ContentSectionViewModel
+
+<section class="content-section" id="@Model.AnchorId">
+    <div class="content-section__header">
+        <h2>@Model.Title</h2>
+        @if (!string.IsNullOrWhiteSpace(Model.Summary))
+        {
+            <p>@Model.Summary</p>
+        }
+    </div>
+    <div class="content-section__body">
+        @if (!string.IsNullOrWhiteSpace(Model.HtmlContent))
+        {
+            <div class="rich-content">
+                @Html.Raw(Model.HtmlContent)
+            </div>
+        }
+        @foreach (var paragraph in Model.Paragraphs)
+        {
+            <p>@paragraph</p>
+        }
+        @if (Model.BulletItems.Any())
+        {
+            <ul class="content-list">
+                @foreach (var bullet in Model.BulletItems)
+                {
+                    <li>@bullet</li>
+                }
+            </ul>
+        }
+        @if (Model.FactItems.Any())
+        {
+            <div class="fact-grid">
+                @foreach (var fact in Model.FactItems)
+                {
+                    <div class="fact-card">
+                        <span>@fact.Label</span>
+                        <strong>@fact.Value</strong>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>

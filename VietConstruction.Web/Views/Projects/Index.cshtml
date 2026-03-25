@@ -1,0 +1,32 @@
+@model ProjectListingPageViewModel
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["MetaDescription"] = Model.MetaDescription;
+
+    var hero = new PageHeroViewModel
+    {
+        Eyebrow = Model.Eyebrow,
+        Title = Model.HeroTitle,
+        Summary = Model.HeroSummary,
+        Metrics = Model.HeroMetrics,
+        Actions = Model.HeroActions
+    };
+}
+
+@await Html.PartialAsync("_PageHero", hero)
+
+<section class="page-shell">
+    <div class="container">
+        <div class="filter-tabs">
+            <a class="@(Model.CurrentFilter == "all" ? "is-active" : string.Empty)" href="/du-an">Tất cả</a>
+            <a class="@(Model.CurrentFilter == "in-progress" ? "is-active" : string.Empty)" href="/du-an/dang-thuc-hien">Đang thực hiện</a>
+            <a class="@(Model.CurrentFilter == "completed" ? "is-active" : string.Empty)" href="/du-an/da-hoan-thanh">Đã hoàn thành</a>
+        </div>
+        <div class="card-grid card-grid--projects">
+            @foreach (var project in Model.Projects)
+            {
+                @await Html.PartialAsync("_ProjectCard", project)
+            }
+        </div>
+    </div>
+</section>

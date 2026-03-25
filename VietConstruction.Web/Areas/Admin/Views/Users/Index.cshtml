@@ -1,0 +1,39 @@
+@model IEnumerable<(ApplicationUser User, string Role)>
+
+<div class="admin-actions">
+    <a class="btn btn-primary" asp-action="Create">Tạo tài khoản</a>
+</div>
+
+<div class="admin-panel">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Họ tên</th>
+                    <th>Email</th>
+                    <th>Vai trò</th>
+                    <th>Trạng thái</th>
+                    <th class="text-end">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.User.FullName</td>
+                        <td>@item.User.Email</td>
+                        <td>@item.Role</td>
+                        <td>@(item.User.IsActive ? "Hoạt động" : "Ngừng")</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@item.User.Id">Sửa</a>
+                            <form asp-action="Delete" asp-route-id="@item.User.Id" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Xóa tài khoản này?');">Xóa</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+@model PostEditorInput
+
+<form method="post" class="admin-panel">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="Title" class="form-label"></label>
+            <input asp-for="Title" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Slug" class="form-label"></label>
+            <input asp-for="Slug" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label asp-for="PostType" class="form-label"></label>
+            <select asp-for="PostType" asp-items="Html.GetEnumSelectList<PostType>()" class="form-select"></select>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="CategoryId" class="form-label"></label>
+            <select asp-for="CategoryId" asp-items="ViewBag.CategoryOptions" class="form-select"></select>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="PublishedAtUtc" class="form-label"></label>
+            <input asp-for="PublishedAtUtc" class="form-control" />
+        </div>
+        <div class="col-12">
+            <label asp-for="FeaturedImageUrl" class="form-label"></label>
+            <input asp-for="FeaturedImageUrl" class="form-control" />
+        </div>
+        <div class="col-12">
+            <label asp-for="MetaDescription" class="form-label"></label>
+            <textarea asp-for="MetaDescription" class="form-control" rows="2"></textarea>
+        </div>
+        <div class="col-12">
+            <label asp-for="Summary" class="form-label"></label>
+            <textarea asp-for="Summary" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="col-12">
+            <label asp-for="BodyHtml" class="form-label"></label>
+            <textarea asp-for="BodyHtml" class="form-control admin-editor" rows="12"></textarea>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="JobLocation" class="form-label"></label>
+            <input asp-for="JobLocation" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label asp-for="ExperienceRequirement" class="form-label"></label>
+            <input asp-for="ExperienceRequirement" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label asp-for="SalaryRange" class="form-label"></label>
+            <input asp-for="SalaryRange" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label asp-for="ApplicationDeadline" class="form-label"></label>
+            <input asp-for="ApplicationDeadline" class="form-control" />
+        </div>
+        <div class="col-md-2 form-check">
+            <input asp-for="IsFeatured" class="form-check-input" />
+            <label asp-for="IsFeatured" class="form-check-label"></label>
+        </div>
+        <div class="col-md-2 form-check">
+            <input asp-for="IsPublished" class="form-check-input" />
+            <label asp-for="IsPublished" class="form-check-label"></label>
+        </div>
+    </div>
+    <div class="admin-form-actions">
+        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+        <a class="btn btn-outline-secondary" asp-action="Index">Quay lại</a>
+    </div>
+</form>
+
+<partial name="_ValidationScriptsPartial" />

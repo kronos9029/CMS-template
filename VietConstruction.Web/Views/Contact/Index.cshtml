@@ -1,0 +1,90 @@
+@model ContactPageViewModel
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["MetaDescription"] = Model.MetaDescription;
+
+    var hero = new PageHeroViewModel
+    {
+        Eyebrow = Model.Eyebrow,
+        Title = Model.HeroTitle,
+        Summary = Model.HeroSummary
+    };
+}
+
+@await Html.PartialAsync("_PageHero", hero)
+
+<section class="page-shell">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-5">
+                <div class="stack-list">
+                    @foreach (var office in Model.Offices)
+                    {
+                        <article class="showcase-card">
+                            <div class="showcase-card__body">
+                                <span class="card-tag">@office.Name</span>
+                                <h3>@office.Address</h3>
+                                <ul class="meta-list">
+                                    <li><strong>Hotline:</strong> @office.Hotline</li>
+                                    <li><strong>Email:</strong> @office.Email</li>
+                                    <li><strong>Giờ làm việc:</strong> @office.WorkingHours</li>
+                                </ul>
+                            </div>
+                        </article>
+                    }
+                </div>
+                <div class="fact-grid">
+                    @foreach (var item in Model.SupportItems)
+                    {
+                        <div class="fact-card">
+                            <span>@item.Label</span>
+                            <strong>@item.Value</strong>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="contact-form-card">
+                    <span class="section-label">Biểu mẫu liên hệ</span>
+                    <h2>Gửi yêu cầu tư vấn</h2>
+                    <p>Biểu mẫu đơn giản, dễ quản lý và có thể thay thế trực tiếp bằng form WordPress trong giai đoạn triển khai CMS thực tế.</p>
+                    @if (Model.IsSubmitted && !string.IsNullOrWhiteSpace(Model.SubmissionMessage))
+                    {
+                        <div class="alert alert-success">@Model.SubmissionMessage</div>
+                    }
+                    <form method="post" asp-controller="Contact" asp-action="Index" novalidate>
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Form.FullName"></label>
+                                <input asp-for="Form.FullName" class="form-control" />
+                                <span asp-validation-for="Form.FullName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Form.PhoneNumber"></label>
+                                <input asp-for="Form.PhoneNumber" class="form-control" />
+                                <span asp-validation-for="Form.PhoneNumber" class="text-danger"></span>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="Form.Email"></label>
+                                <input asp-for="Form.Email" class="form-control" />
+                                <span asp-validation-for="Form.Email" class="text-danger"></span>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="Form.Message"></label>
+                                <textarea asp-for="Form.Message" class="form-control" rows="6"></textarea>
+                                <span asp-validation-for="Form.Message" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <button class="button button--primary mt-4" type="submit">Gửi liên hệ</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

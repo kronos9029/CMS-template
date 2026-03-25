@@ -1,0 +1,118 @@
+:root {
+    --admin-bg: #f3f6fa;
+    --admin-surface: #ffffff;
+    --admin-border: #d8e0eb;
+    --admin-ink: #16324f;
+    --admin-muted: #66758a;
+    --admin-accent: #0f4c81;
+}
+
+body.admin-body {
+    background: var(--admin-bg);
+    color: var(--admin-ink);
+}
+
+.admin-shell {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+}
+
+.admin-sidebar {
+    padding: 1.5rem;
+    background: #0f2438;
+    color: #fff;
+}
+
+.admin-brand {
+    display: block;
+    margin-bottom: 1.5rem;
+    color: #fff;
+    text-decoration: none;
+}
+
+.admin-brand__eyebrow {
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    opacity: 0.7;
+    text-transform: uppercase;
+}
+
+.admin-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.admin-nav a {
+    padding: 0.75rem 0.95rem;
+    border-radius: 0.8rem;
+    color: rgba(255,255,255,0.78);
+    text-decoration: none;
+}
+
+.admin-nav a.active,
+.admin-nav a:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+.admin-main {
+    padding: 1.5rem;
+}
+
+.admin-header,
+.admin-user,
+.admin-actions,
+.admin-form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.admin-actions,
+.admin-form-actions {
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+.admin-panel,
+.admin-stat {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 12px 30px rgba(17, 38, 63, 0.05);
+}
+
+.admin-stat span,
+.admin-list-item span {
+    display: block;
+    color: var(--admin-muted);
+    font-size: 0.92rem;
+}
+
+.admin-stat strong {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 2rem;
+}
+
+.admin-list-item + .admin-list-item {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--admin-border);
+}
+
+.admin-editor {
+    min-height: 280px;
+    font-family: Consolas, monospace;
+}
+
+@media (max-width: 991px) {
+    .admin-shell {
+        grid-template-columns: 1fr;
+    }
+}

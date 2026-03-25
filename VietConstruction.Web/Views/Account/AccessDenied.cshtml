@@ -1,0 +1,11 @@
+@{
+    ViewData["Title"] = "Không có quyền truy cập";
+    Layout = "_AuthLayout";
+}
+
+<section class="container py-5">
+    <div class="alert alert-warning">
+        Bạn không có quyền truy cập khu vực này. Vui lòng đăng nhập bằng tài khoản phù hợp.
+    </div>
+    <a class="btn btn-primary" asp-controller="Account" asp-action="Login">Về trang đăng nhập</a>
+</section>
