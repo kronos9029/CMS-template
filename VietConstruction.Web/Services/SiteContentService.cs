@@ -113,6 +113,8 @@ public sealed class SiteContentService(ApplicationDbContext dbContext) : ISiteCo
             .Select(MapJob)
             .ToArray();
 
+        var publishedProjectCount = dbContext.Projects.Count(x => x.IsPublished);
+
         return new HomePageViewModel
         {
             Title = homePage?.Title ?? "Trang chủ",
@@ -174,6 +176,10 @@ public sealed class SiteContentService(ApplicationDbContext dbContext) : ISiteCo
                     LinkLabel = "Xem danh mục"
                 }
             ],
+            HeroProof = new HeroProofItem(
+                publishedProjectCount.ToString(),
+                "Năng lực đã kiểm chứng",
+                "Dự án trên nhiều tỉnh thành và loại hình công trình"),
             FeaturedProjects = featuredProjects,
             LatestNews = latestNews,
             RecruitmentPreview = jobs
@@ -209,8 +215,10 @@ public sealed class SiteContentService(ApplicationDbContext dbContext) : ISiteCo
         };
     }
 
-    public ProjectListingPageViewModel GetProjectsPage(string filter)
+    public ProjectListingPageViewModel GetProjectsPage(string filter, int page = 1)
     {
+        const int pageSize = 6;
+        var currentPage = Math.Max(page, 1);
         var query = dbContext.Projects.AsNoTracking().Where(x => x.IsPublished);
         if (string.Equals(filter, "in-progress", StringComparison.OrdinalIgnoreCase))
         {
@@ -219,6 +227,13 @@ public sealed class SiteContentService(ApplicationDbContext dbContext) : ISiteCo
         else if (string.Equals(filter, "completed", StringComparison.OrdinalIgnoreCase))
         {
             query = query.Where(x => x.Status == ProjectStatus.Completed);
+        }
+
+        var totalItems = query.Count();
+        var totalPages = Math.Max((int)Math.Ceiling(totalItems / (double)pageSize), 1);
+        if (currentPage > totalPages)
+        {
+            currentPage = totalPages;
         }
 
         return new ProjectListingPageViewModel
@@ -248,14 +263,22 @@ public sealed class SiteContentService(ApplicationDbContext dbContext) : ISiteCo
             ],
             Projects = query
                 .OrderBy(x => x.DisplayOrder)
+                .Skip((currentPage - 1) * pageSize)
+                .Take(pageSize)
                 .ToList()
                 .Select(MapProject)
-                .ToArray()
+                .ToArray(),
+            CurrentPage = currentPage,
+            PageSize = pageSize,
+            TotalItems = totalItems,
+            TotalPages = totalPages
         };
     }
 
-    public NewsListingPageViewModel GetNewsPage(string category)
+    public NewsListingPageViewModel GetNewsPage(string category, int page = 1)
     {
+        const int pageSize = 6;
+        var currentPage = Math.Max(page, 1);
         var query = dbContext.Posts
             .AsNoTracking()
             .Include(x => x.Category)
@@ -268,6 +291,13 @@ public sealed class SiteContentService(ApplicationDbContext dbContext) : ISiteCo
         else if (string.Equals(category, "announcements", StringComparison.OrdinalIgnoreCase))
         {
             query = query.Where(x => x.Category != null && x.Category.Slug == "thong-bao");
+        }
+
+        var totalItems = query.Count();
+        var totalPages = Math.Max((int)Math.Ceiling(totalItems / (double)pageSize), 1);
+        if (currentPage > totalPages)
+        {
+            currentPage = totalPages;
         }
 
         return new NewsListingPageViewModel
@@ -291,14 +321,32 @@ public sealed class SiteContentService(ApplicationDbContext dbContext) : ISiteCo
             ],
             Articles = query
                 .OrderByDescending(x => x.PublishedAtUtc)
+                .Skip((currentPage - 1) * pageSize)
+                .Take(pageSize)
                 .ToList()
                 .Select(MapArticle)
-                .ToArray()
+                .ToArray(),
+            CurrentPage = currentPage,
+            PageSize = pageSize,
+            TotalItems = totalItems,
+            TotalPages = totalPages
         };
     }
 
-    public RecruitmentListingPageViewModel GetRecruitmentPage()
+    public RecruitmentListingPageViewModel GetRecruitmentPage(int page = 1)
     {
+        const int pageSize = 5;
+        var currentPage = Math.Max(page, 1);
+        var recruitmentQuery = dbContext.Posts
+            .AsNoTracking()
+            .Where(x => x.IsPublished && x.PostType == PostType.Recruitment);
+        var totalItems = recruitmentQuery.Count();
+        var totalPages = Math.Max((int)Math.Ceiling(totalItems / (double)pageSize), 1);
+        if (currentPage > totalPages)
+        {
+            currentPage = totalPages;
+        }
+
         return new RecruitmentListingPageViewModel
         {
             Title = "Tuyển dụng",
@@ -311,13 +359,17 @@ public sealed class SiteContentService(ApplicationDbContext dbContext) : ISiteCo
                 new ActionLink("Gửi hồ sơ qua email", "mailto:tuyendung@vietthanhcong.vn", true),
                 new ActionLink("Liên hệ phòng nhân sự", "/lien-he")
             ],
-            Jobs = dbContext.Posts
-                .AsNoTracking()
-                .Where(x => x.IsPublished && x.PostType == PostType.Recruitment)
+            Jobs = recruitmentQuery
                 .OrderByDescending(x => x.PublishedAtUtc)
+                .Skip((currentPage - 1) * pageSize)
+                .Take(pageSize)
                 .ToList()
                 .Select(MapJob)
-                .ToArray()
+                .ToArray(),
+            CurrentPage = currentPage,
+            PageSize = pageSize,
+            TotalItems = totalItems,
+            TotalPages = totalPages
         };
     }
 

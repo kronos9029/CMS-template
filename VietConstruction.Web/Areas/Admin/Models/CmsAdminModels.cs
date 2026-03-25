@@ -27,6 +27,19 @@ public sealed class DashboardItemViewModel
     public required string Meta { get; init; }
 }
 
+public sealed class AdminPagedListViewModel<TItem>
+{
+    public IReadOnlyList<TItem> Items { get; init; } = Array.Empty<TItem>();
+
+    public int CurrentPage { get; init; }
+
+    public int PageSize { get; init; }
+
+    public int TotalItems { get; init; }
+
+    public int TotalPages { get; init; }
+}
+
 public sealed class PageEditorInput
 {
     public int Id { get; set; }

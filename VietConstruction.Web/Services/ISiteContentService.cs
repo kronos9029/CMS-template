@@ -10,11 +10,11 @@ public interface ISiteContentService
 
     CorporatePageViewModel GetCompanyPage(string slug);
 
-    ProjectListingPageViewModel GetProjectsPage(string filter);
+    ProjectListingPageViewModel GetProjectsPage(string filter, int page = 1);
 
-    NewsListingPageViewModel GetNewsPage(string category);
+    NewsListingPageViewModel GetNewsPage(string category, int page = 1);
 
-    RecruitmentListingPageViewModel GetRecruitmentPage();
+    RecruitmentListingPageViewModel GetRecruitmentPage(int page = 1);
 
     ContactPageViewModel GetContactPage(ContactFormInputModel? form = null, bool isSubmitted = false, string? submissionMessage = null);
 }

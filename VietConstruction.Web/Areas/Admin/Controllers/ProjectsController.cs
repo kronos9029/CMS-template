@@ -12,11 +12,34 @@ namespace VietConstruction.Web.Areas.Admin.Controllers;
 [Authorize(Roles = $"{CmsRoles.Admin},{CmsRoles.Editor}")]
 public sealed class ProjectsController(ApplicationDbContext dbContext) : Controller
 {
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index([FromQuery] int page = 1)
     {
+        const int pageSize = 10;
         ViewData["Title"] = "Quản lý dự án";
         ViewData["ActiveSection"] = "projects";
-        return View(await dbContext.Projects.OrderBy(x => x.DisplayOrder).ThenByDescending(x => x.UpdatedAtUtc).ToListAsync());
+
+        var query = dbContext.Projects
+            .AsNoTracking()
+            .OrderBy(x => x.DisplayOrder)
+            .ThenByDescending(x => x.UpdatedAtUtc);
+
+        var totalItems = await query.CountAsync();
+        var totalPages = Math.Max(1, (int)Math.Ceiling(totalItems / (double)pageSize));
+        var currentPage = Math.Clamp(page, 1, totalPages);
+
+        var items = await query
+            .Skip((currentPage - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return View(new AdminPagedListViewModel<ProjectEntry>
+        {
+            Items = items,
+            CurrentPage = currentPage,
+            PageSize = pageSize,
+            TotalItems = totalItems,
+            TotalPages = totalPages
+        });
     }
 
     public IActionResult Create()

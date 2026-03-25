@@ -13,11 +13,34 @@ namespace VietConstruction.Web.Areas.Admin.Controllers;
 [Authorize(Roles = $"{CmsRoles.Admin},{CmsRoles.Editor}")]
 public sealed class PostsController(ApplicationDbContext dbContext) : Controller
 {
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index([FromQuery] int page = 1)
     {
+        const int pageSize = 10;
         ViewData["Title"] = "Quản lý bài viết";
         ViewData["ActiveSection"] = "posts";
-        return View(await dbContext.Posts.Include(x => x.Category).OrderByDescending(x => x.PublishedAtUtc).ToListAsync());
+
+        var query = dbContext.Posts
+            .AsNoTracking()
+            .Include(x => x.Category)
+            .OrderByDescending(x => x.PublishedAtUtc);
+
+        var totalItems = await query.CountAsync();
+        var totalPages = Math.Max(1, (int)Math.Ceiling(totalItems / (double)pageSize));
+        var currentPage = Math.Clamp(page, 1, totalPages);
+
+        var items = await query
+            .Skip((currentPage - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return View(new AdminPagedListViewModel<ContentPost>
+        {
+            Items = items,
+            CurrentPage = currentPage,
+            PageSize = pageSize,
+            TotalItems = totalItems,
+            TotalPages = totalPages
+        });
     }
 
     public async Task<IActionResult> Create()

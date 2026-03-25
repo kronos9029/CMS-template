@@ -25,4 +25,17 @@ public sealed class CompanyController(ISiteContentService siteContentService) : 
 
     [HttpGet("may-moc-thiet-bi")]
     public IActionResult MayMocThietBi() => View("Page", siteContentService.GetCompanyPage("may-moc-thiet-bi"));
+
+    [HttpGet("{slug}", Order = 999)]
+    public IActionResult DynamicPage(string slug)
+    {
+        try
+        {
+            return View("Page", siteContentService.GetCompanyPage(slug));
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+    }
 }

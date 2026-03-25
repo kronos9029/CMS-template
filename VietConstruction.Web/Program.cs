@@ -2,6 +2,7 @@ using System.IO;
 using System.Globalization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using VietConstruction.Web.Data;
@@ -16,7 +17,13 @@ var allowedOrigins = builder.Configuration.GetSection("Frontend:AllowedOrigins")
 builder.Services.AddLocalization();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
-builder.Services.AddScoped<ISiteContentService, SiteContentService>();
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
+});
+builder.Services.AddScoped<ISiteContentService, CmsSiteContentService>();
 builder.Services.Configure<CmsSeedOptions>(builder.Configuration.GetSection(CmsSeedOptions.SectionName));
 var dataProtectionKeysPath = builder.Configuration["DataProtection:KeysPath"];
 if (!string.IsNullOrWhiteSpace(dataProtectionKeysPath))
@@ -70,6 +77,8 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 var supportedCultures = new[] { new CultureInfo("vi-VN") };
+
+app.UseForwardedHeaders();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

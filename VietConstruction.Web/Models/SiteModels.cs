@@ -6,6 +6,8 @@ public sealed record ActionLink(string Label, string Url, bool IsPrimary = false
 
 public sealed record MetricItem(string Value, string Label);
 
+public sealed record HeroProofItem(string Value, string Eyebrow, string Title);
+
 public sealed record KeyValueItem(string Label, string Value);
 
 public sealed record NavigationItem(string Label, string Url, IReadOnlyList<NavigationItem>? Children = null);
@@ -138,6 +140,14 @@ public sealed class ProjectListingPageViewModel
     public IReadOnlyList<MetricItem> HeroMetrics { get; init; } = Array.Empty<MetricItem>();
 
     public IReadOnlyList<ProjectCardViewModel> Projects { get; init; } = Array.Empty<ProjectCardViewModel>();
+
+    public int CurrentPage { get; init; }
+
+    public int PageSize { get; init; }
+
+    public int TotalItems { get; init; }
+
+    public int TotalPages { get; init; }
 }
 
 public sealed class ArticleCardViewModel
@@ -170,6 +180,14 @@ public sealed class NewsListingPageViewModel
     public IReadOnlyList<ActionLink> HeroActions { get; init; } = Array.Empty<ActionLink>();
 
     public IReadOnlyList<ArticleCardViewModel> Articles { get; init; } = Array.Empty<ArticleCardViewModel>();
+
+    public int CurrentPage { get; init; }
+
+    public int PageSize { get; init; }
+
+    public int TotalItems { get; init; }
+
+    public int TotalPages { get; init; }
 }
 
 public sealed class JobCardViewModel
@@ -202,6 +220,14 @@ public sealed class RecruitmentListingPageViewModel
     public IReadOnlyList<ActionLink> HeroActions { get; init; } = Array.Empty<ActionLink>();
 
     public IReadOnlyList<JobCardViewModel> Jobs { get; init; } = Array.Empty<JobCardViewModel>();
+
+    public int CurrentPage { get; init; }
+
+    public int PageSize { get; init; }
+
+    public int TotalItems { get; init; }
+
+    public int TotalPages { get; init; }
 }
 
 public sealed class OfficeCardViewModel
@@ -263,6 +289,8 @@ public sealed class HomePageViewModel
     public IReadOnlyList<ShowcaseCardViewModel> CapabilityHighlights { get; init; } = Array.Empty<ShowcaseCardViewModel>();
 
     public IReadOnlyList<ProjectCardViewModel> FeaturedProjects { get; init; } = Array.Empty<ProjectCardViewModel>();
+
+    public required HeroProofItem HeroProof { get; init; }
 
     public IReadOnlyList<ArticleCardViewModel> LatestNews { get; init; } = Array.Empty<ArticleCardViewModel>();
 
